@@ -1,6 +1,6 @@
 const router = require('express').Router();
-// require notes library from lib folder
-const notesArr = require('../../db/db.json');
+const { validateNote, deleteNote, createNewNote, findById } = require('../../lib/notes');
+const { notes } = require('../../db/db.json');
 
 // set with "get" where the api is located
     // set notes data to result
@@ -8,8 +8,34 @@ const notesArr = require('../../db/db.json');
 // get id when certain element is clicked
     // if there is a result, respond with the result
     // else respond with sendStatus(404) (might need this, idk yet)
+router.get('/notes/:id', (req, res) => {
+    let result = findById(req.params.id, notes);
+
+    if(result) {
+        res.json(result);
+    } else {
+        res.sendStatus(404);
+    }
+});
 
 // post data (create new note)
     // set id based on the next item in the array
     // validate if there is any incorrect fields/entries. If so, send 400 error back in alert
     // if not, then create new note
+router.post('/notes', (req, res) => {
+    req.body.id = notes.length.toString();
+
+    if(!validateNote(req.body)) {
+        res.sendStatus(400).send("The note is not properly formatted.");
+    } else {
+        const note = createNewNote(req.body, notes);
+
+        res.json(note);
+    }
+});
+
+router.post('/notes', (req, res) => {
+    const updatedData = deleteNote(req, notes);
+
+    res.json(updatedData);
+});
