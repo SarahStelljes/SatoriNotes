@@ -1,7 +1,6 @@
 const fs = require('fs');
 const {
     createNewNote,
-    findById,
     deleteNote,
     validateNote
 } = require('../lib/notes');
@@ -19,25 +18,7 @@ test("Creates a note object", () => {
     expect(note.text).toBe("Voucher.");
 });
 
-test("finds by id", () => {
-    const startingNotes = [
-        {
-            id: "2",
-            title: "Kingpin",
-            text: "Voucher."
-        },
-        {
-            id: "3",
-            title: "Horseshoe",
-            text: "Batwing"
-        },
-    ];
-
-    const result = findById("3", startingNotes);
-    expect(result.title).toBe("Horseshoe");
-});
-
-test("Delete a note", () => {
+test("Deletes a note", () => {
     const startingNotes = [
         {
             id: "0",
@@ -87,4 +68,4 @@ test("validates the input of the note", () => {
     expect(result1).toBe(true);
     expect(result2).toBe(false);
     expect(result3).toBe(false);
-})
+});
