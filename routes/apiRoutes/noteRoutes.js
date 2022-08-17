@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { validateNote, deleteNote, createNewNote, findById } = require('../../lib/notes');
+const { validateNote, deleteNote, createNewNote } = require('../../lib/notes');
 const { notes } = require('../../db/db.json');
 
 // set with "get" where the api is located
@@ -8,20 +8,13 @@ const { notes } = require('../../db/db.json');
 // get id when certain element is clicked
     // if there is a result, respond with the result
     // else respond with sendStatus(404) (might need this, idk yet)
-router.get('/notes/:id', (req, res) => {
-    let result = findById(req.params.id, notes);
+router.get('/notes', (req, res) => {
+    let results = notes;
 
-    if(result) {
-        res.json(result);
-    } else {
-        res.sendStatus(404);
-    }
+    res.json(results);
 });
 
-// post data (create new note)
-    // set id based on the next item in the array
-    // validate if there is any incorrect fields/entries. If so, send 400 error back in alert
-    // if not, then create new note
+// Save Note
 router.post('/notes', (req, res) => {
     req.body.id = notes.length.toString();
 
@@ -34,8 +27,10 @@ router.post('/notes', (req, res) => {
     }
 });
 
-router.post('/notes', (req, res) => {
+router.delete('/notes/:id', (req, res) => {
     const updatedData = deleteNote(req, notes);
 
     res.json(updatedData);
 });
+
+module.exports = router;
